@@ -3,6 +3,9 @@ const app = express();
 const bodyParser= require("body-parser");
 const request = require("request");
 const https = require("https");
+require("dotenv").config();
+
+const apiKey = process.env.API_KEY;
 
 app.use(express.static("public"));
 
@@ -34,7 +37,8 @@ app.post("/",function(req,res){
     const url = "https://us21.api.mailchimp.com/3.0/lists/f6059bb371";
     const options = {
         method:"POST",
-        auth:"rahul:db506a2a1e9fd017cbd133b08e62bb79-us21"
+        
+        auth:"rahul:"+apiKey,
     }
 
     const request = https.request(url,options,function(response){
@@ -45,9 +49,9 @@ app.post("/",function(req,res){
             res.sendFile(__dirname+"/failure.html");
         }
         
-        response.on("data",function(data){
-            console.log(JSON.parse(data));
-        })
+        // response.on("data",function(data){
+        //     console.log(JSON.parse(data));
+        // })
     })
     request.write(jsonData);
     request.end();
